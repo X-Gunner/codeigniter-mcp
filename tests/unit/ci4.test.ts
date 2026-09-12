@@ -210,10 +210,20 @@ describe("ci4 templates", () => {
     expect(content).toContain("'fullName' => [");
   });
 
-  it("view: renders the listing with esc()", () => {
+  it("view: renders the listing with esc() and CSRF delete form", () => {
     const content = renderCi4View(CTX);
     expect(content).toContain("<h1>Patient list</h1>");
     expect(content).toContain("<?= esc($item['fullName']) ?>");
+    expect(content).toContain("<?= csrf_field() ?>");
+    expect(content).toContain("<form action=");
+  });
+
+  it("controller: withService=true delegates to Service", () => {
+    const content = renderCi4Controller(CTX, true);
+    expect(content).toContain("use App\\Services\\PatientService;");
+    expect(content).toContain("$this->service = new PatientService();");
+    expect(content).toContain("$this->service->all()");
+    expect(content).toContain("$this->service->create(");
   });
 
   it("model test references the table", () => {

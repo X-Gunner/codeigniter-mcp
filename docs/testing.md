@@ -3,7 +3,7 @@
 ## Tests
 
 ```bash
-npm test               # 154 tests: unit + integration + e2e
+npm test               # 165 tests: unit + integration + e2e
 npm run test:watch     # watch mode
 npm run typecheck      # tsc --noEmit over src + tests
 ```
@@ -11,7 +11,7 @@ npm run typecheck      # tsc --noEmit over src + tests
 Coverage:
 
 - **Unit** (`tests/unit/`): core (fs-safe, rate-limiter, config), PHP templates,
-  and the 7 tools (happy path, invalid input → typed error, destructive
+  and the 8 tools (happy path, invalid input → typed error, destructive
   operation without confirmation, collision/overwrite, rate limit).
 - **Integration** (`tests/integration/server.test.ts`): real server over the SDK
   `InMemoryTransport` — tool/resource/prompt listing, protocol calls, alive

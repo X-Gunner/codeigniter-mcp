@@ -37,7 +37,7 @@ export async function scaffoldController(
 ): Promise<ToolResult<ScaffoldControllerPayload>> {
   return handleToolCall(async () => {
     const parsed = ScaffoldControllerInput.parse(input);
-    const ctx = buildResourceContext(parsed.resourceName, []);
+    const ctx = buildResourceContext(parsed.resourceName, parsed.fields ?? []);
     const warnings: string[] = [];
 
     const isCi4 = deps.conventions.framework === "ci4";

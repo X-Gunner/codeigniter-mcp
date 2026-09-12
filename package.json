@@ -45,12 +45,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/X-Gunner/codeigniter-mcp.git"
+    "url": "git+https://github.com/AntigamerISK/codeigniter-mcp.git"
   },
   "bugs": {
-    "url": "https://github.com/X-Gunner/codeigniter-mcp/issues"
+    "url": "https://github.com/AntigamerISK/codeigniter-mcp/issues"
   },
-  "homepage": "https://github.com/X-Gunner/codeigniter-mcp#readme",
+  "homepage": "https://github.com/AntigamerISK/codeigniter-mcp#readme",
   "sideEffects": false,
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",
@@ -61,5 +61,10 @@
     "tsx": "^4.16.0",
     "typescript": "^5.5.0",
     "vitest": "^4.1.10"
+  },
+  "overrides": {
+    "fast-uri": "^3.1.6",
+    "hono": "^4.13.5",
+    "qs": "^6.15.4"
   }
 }

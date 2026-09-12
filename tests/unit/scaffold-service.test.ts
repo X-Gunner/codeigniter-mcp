@@ -28,6 +28,31 @@ describe("scaffold_service", () => {
     }
   });
 
+  it("generates specific field validation rules when fields are provided", async () => {
+    const { root, deps, cleanup } = createTestContext();
+    try {
+      const result = await scaffoldService(
+        {
+          resourceName: "Product",
+          fields: [
+            { name: "title", type: "string", required: true, validation: "max:100" },
+            { name: "price", type: "float", required: true },
+          ],
+        },
+        deps,
+      );
+      expect(result.success).toBe(true);
+      const content = readFileSync(
+        join(root, "app", "Services", "ProductService.php"),
+        "utf8",
+      );
+      expect(content).toContain("'title' => ['required' => true, 'max' => 100]");
+      expect(content).toContain("'price' => ['required' => true]");
+    } finally {
+      cleanup();
+    }
+  });
+
   it("contract first: warns if the repository interface does not exist", async () => {
     const { deps, cleanup } = createTestContext();
     try {

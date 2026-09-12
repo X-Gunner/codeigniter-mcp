@@ -22,6 +22,7 @@ export const RunMigrationInput = z.object({
 export const RunMigrationOutput = z.object({
   success: z.boolean(),
   executed: z.array(z.string()),
+  warnings: z.array(z.string()).optional(),
   error: z
     .object({
       type: z.string(),

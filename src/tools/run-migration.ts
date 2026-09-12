@@ -27,6 +27,7 @@ import { RunMigrationInput } from "../schemas/run-migration.schema.js";
 
 export interface RunMigrationPayload {
   executed: string[];
+  warnings?: string[];
 }
 
 export async function runMigration(
@@ -63,13 +64,20 @@ export async function runMigration(
       }
     }
 
+    const warnings: string[] = [];
+    if (migrationName !== null && !deps.conventions.migration.appendName) {
+      warnings.push(
+        `The ${deps.conventions.framework} runner does not support targeting a single migration file; all pending migrations were processed.`,
+      );
+    }
+
     const { executed } = await deps.migrationExecutor.execute(
       parsed.direction,
       migrationName,
       deps.appRoot,
     );
 
-    return { executed };
+    return { executed, ...(warnings.length > 0 ? { warnings } : {}) };
   });
 }
 

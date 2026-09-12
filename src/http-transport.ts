@@ -20,6 +20,8 @@ export interface HttpTransportHandle {
   transport: StreamableHTTPServerTransport;
   /** Port actually bound (useful with port 0 in tests). */
   port: number;
+  /** Host actually bound. */
+  host: string;
   httpServer: Server;
   close: () => Promise<void>;
 }
@@ -32,18 +34,76 @@ function log(message: string): void {
 /**
  * Starts the HTTP server and returns the transport ready to connect.
  *
- * @param port     0 → ephemeral port (useful in tests).
+ * @param port         0 → ephemeral port (useful in tests).
  * @param maxBodyBytes Content-Length limit per request.
+ * @param host         Interface to bind to (defaults to 127.0.0.1 for security).
  */
 export async function startHttpTransport(
   port: number,
   maxBodyBytes: number = MAX_HTTP_BODY_BYTES,
+  host: string = process.env.MCP_BIND_HOST ?? "127.0.0.1",
 ): Promise<HttpTransportHandle> {
   const transport = new StreamableHTTPServerTransport({
     sessionIdGenerator: () => randomUUID(),
   });
 
+  const allowedHosts = new Set([
+    "localhost",
+    "127.0.0.1",
+    "::1",
+    host.toLowerCase(),
+    ...(process.env.MCP_ALLOWED_HOSTS
+      ? process.env.MCP_ALLOWED_HOSTS.split(",").map((h) => h.trim().toLowerCase())
+      : []),
+  ]);
+
   const httpServer = createServer(async (req, res) => {
+    // DNS Rebinding protection: validate Host header.
+    const rawHost = req.headers.host ?? "";
+    const hostname = rawHost.split(":")[0]?.toLowerCase() ?? "";
+    if (
+      process.env.MCP_ALLOW_ANY_HOST !== "true" &&
+      hostname &&
+      !allowedHosts.has(hostname)
+    ) {
+      res.writeHead(403, {
+        "Content-Type": "application/json",
+        Connection: "close",
+      });
+      res.end(
+        JSON.stringify({
+          error: "Forbidden: Invalid Host header (DNS rebinding protection).",
+        }),
+      );
+      return;
+    }
+
+    // Optional API key authentication.
+    const expectedApiKey = process.env.MCP_API_KEY;
+    if (expectedApiKey) {
+      const authHeader = req.headers.authorization;
+      const customKeyHeader = req.headers["x-api-key"];
+      const token =
+        typeof authHeader === "string" && authHeader.startsWith("Bearer ")
+          ? authHeader.slice(7).trim()
+          : typeof customKeyHeader === "string"
+            ? customKeyHeader.trim()
+            : undefined;
+
+      if (!token || token !== expectedApiKey) {
+        res.writeHead(401, {
+          "Content-Type": "application/json",
+          Connection: "close",
+        });
+        res.end(
+          JSON.stringify({
+            error: "Unauthorized: Missing or invalid API key.",
+          }),
+        );
+        return;
+      }
+    }
+
     // Clients without SSE support only get direct responses (no GET).
     if (req.method === "GET" && !req.headers.accept?.includes("text/event-stream")) {
       res.writeHead(405, {
@@ -90,13 +150,14 @@ export async function startHttpTransport(
     };
     httpServer.once("error", onError);
     httpServer.once("listening", onListening);
-    httpServer.listen(port);
+    httpServer.listen(port, host);
   });
 
-  log(`Streamable HTTP transport listening on http://localhost:${actualPort}/`);
+  log(`Streamable HTTP transport listening on http://${host}:${actualPort}/`);
   return {
     transport,
     port: actualPort,
+    host,
     httpServer,
     close: () => new Promise((resolvePromise) => httpServer.close(() => resolvePromise())),
   };

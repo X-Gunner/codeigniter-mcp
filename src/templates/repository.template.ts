@@ -145,7 +145,13 @@ final class ${className}Repository implements ${className}RepositoryInterface
 ${createBindings(ctx)}
         ]);
 
-        return $this->findById((int) $this->db->lastInsertId());
+        $id = (int) $this->db->lastInsertId();
+        $record = $this->findById($id);
+        if ($record === null) {
+            throw new \\RuntimeException('Failed to retrieve created ${className} with id ' . $id);
+        }
+
+        return $record;
     }
 
     /**
@@ -176,7 +182,7 @@ ${createBindings(ctx)}
         );
         $statement->execute($values);
 
-        return $statement->rowCount() > 0;
+        return $statement->rowCount() > 0 || $this->findById($id) !== null;
     }
 
     public function delete(int $id): bool

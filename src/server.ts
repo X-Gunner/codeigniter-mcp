@@ -12,6 +12,7 @@ import { registerPrompts } from "./prompts/index.js";
 import { registerExplainConvention } from "./resources/explain-convention.js";
 import { registerLintAgainstFrameworkRules } from "./tools/lint-against-framework-rules.js";
 import { registerRunMigration } from "./tools/run-migration.js";
+import { registerScaffoldCi4McpServer } from "./tools/scaffold-ci4-mcp-server.js";
 import { registerScaffoldController } from "./tools/scaffold-controller.js";
 import { registerScaffoldFullResource } from "./tools/scaffold-full-resource.js";
 import { registerScaffoldRepository } from "./tools/scaffold-repository.js";
@@ -32,6 +33,7 @@ export const TOOL_NAMES = [
   "validate_route",
   "run_migration",
   "lint_against_framework_rules",
+  "scaffold_ci4_mcp_server",
 ] as const;
 
 export const RESOURCE_URIS = [
@@ -53,6 +55,7 @@ export function buildServer(deps: ToolDeps): McpServer {
   registerValidateRoute(server, deps);
   registerRunMigration(server, deps);
   registerLintAgainstFrameworkRules(server, deps);
+  registerScaffoldCi4McpServer(server, deps);
   registerExplainConvention(server);
   registerPrompts(server);
   return server;

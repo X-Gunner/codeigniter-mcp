@@ -9,8 +9,8 @@
  * - `ToolDeps` construction (dependency injection for every tool).
  */
 
-import { existsSync, readFileSync, statSync } from "node:fs";
-import { relative, resolve, sep } from "node:path";
+import { existsSync, readFileSync, realpathSync, statSync } from "node:fs";
+import { dirname, relative, resolve, sep } from "node:path";
 import { ValidationError } from "./errors.js";
 import { PhpMigrationExecutor } from "./php-migration-executor.js";
 import { RateLimiter } from "./rate-limiter.js";
@@ -101,6 +101,9 @@ export interface ProjectConventions {
 /** Name of the optional per-project conventions file at APP_ROOT. */
 export const PROJECT_CONVENTIONS_FILE = ".codeigniter-mcp.json";
 
+/** Default PHP binary to invoke for native runners (configurable via PHP_BINARY). */
+export const DEFAULT_PHP_BINARY = process.env.PHP_BINARY ?? "php";
+
 /** Built-in contract (default): the spec's CodeIgniter-style framework. */
 export const SPEC_CONVENTIONS: ProjectConventions = {
   framework: "spec",
@@ -108,8 +111,8 @@ export const SPEC_CONVENTIONS: ProjectConventions = {
   requireStrictTypes: true,
   controllerSuffix: "Controller",
   migration: {
-    up: ["php", "bin/migrate", "up"],
-    down: ["php", "bin/migrate", "down"],
+    up: [DEFAULT_PHP_BINARY, "bin/migrate", "up"],
+    down: [DEFAULT_PHP_BINARY, "bin/migrate", "down"],
     appendName: true,
   },
 };
@@ -121,8 +124,8 @@ export const CI4_CONVENTIONS: ProjectConventions = {
   requireStrictTypes: false,
   controllerSuffix: "",
   migration: {
-    up: ["php", "spark", "migrate"],
-    down: ["php", "spark", "migrate:rollback"],
+    up: [DEFAULT_PHP_BINARY, "spark", "migrate"],
+    down: [DEFAULT_PHP_BINARY, "spark", "migrate:rollback"],
     appendName: false,
   },
 };
@@ -336,6 +339,26 @@ export function resolveInAppRoot(appRoot: string, ...segments: string[]): string
       `Path outside APP_ROOT is not allowed: ${segments.join("/")}`,
     );
   }
+
+  // Defense in depth against symlink traversal: ensure the canonical path stays inside APP_ROOT.
+  if (existsSync(base)) {
+    const realBase = realpathSync(base);
+    let existingAncestor = candidate;
+    while (existingAncestor && !existsSync(existingAncestor)) {
+      const parent = dirname(existingAncestor);
+      if (parent === existingAncestor) break;
+      existingAncestor = parent;
+    }
+    if (existsSync(existingAncestor)) {
+      const realAncestor = realpathSync(existingAncestor);
+      if (realAncestor !== realBase && !realAncestor.startsWith(`${realBase}${sep}`)) {
+        throw new ValidationError(
+          `Path outside APP_ROOT is not allowed: ${segments.join("/")}`,
+        );
+      }
+    }
+  }
+
   return candidate;
 }
 

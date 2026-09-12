@@ -176,4 +176,57 @@ describe("HTTP transport (Streamable)", () => {
       /EADDRINUSE|address already in use/i,
     );
   });
+
+  it("blocks DNS rebinding with untrusted Host header → 403 Forbidden", async () => {
+    const response = await rawSocket(
+      port,
+      "POST / HTTP/1.1\r\nHost: evil-rebound-domain.com\r\nContent-Type: application/json\r\nContent-Length: 2\r\nConnection: close\r\n\r\n{}",
+    );
+    expect(response).toContain("403");
+    expect(response).toContain("DNS rebinding protection");
+  });
+
+  it("enforces MCP_API_KEY when configured → 401 without key, 200 with key", async () => {
+    const originalKey = process.env.MCP_API_KEY;
+    process.env.MCP_API_KEY = "super-secret-token";
+    const authServerHandle = await startHttpTransport(0);
+    const authPort = authServerHandle.port;
+    const authServer = buildServer(ctx.deps);
+    await authServer.connect(authServerHandle.transport);
+
+    try {
+      // Missing token → 401
+      const resUnauth = await jsonPost(authPort, {
+        jsonrpc: "2.0",
+        id: 1,
+        method: "initialize",
+        params: { protocolVersion: "2025-11-25", capabilities: {}, clientInfo: { name: "test", version: "1" } },
+      });
+      expect(resUnauth.status).toBe(401);
+
+      // Wrong token → 401
+      const resWrong = await jsonPost(
+        authPort,
+        { jsonrpc: "2.0", id: 2, method: "initialize", params: { protocolVersion: "2025-11-25", capabilities: {}, clientInfo: { name: "test", version: "1" } } },
+        { Authorization: "Bearer wrong-token" },
+      );
+      expect(resWrong.status).toBe(401);
+
+      // Correct token → 200
+      const resOk = await jsonPost(
+        authPort,
+        { jsonrpc: "2.0", id: 3, method: "initialize", params: { protocolVersion: "2025-11-25", capabilities: {}, clientInfo: { name: "test", version: "1" } } },
+        { Authorization: "Bearer super-secret-token" },
+      );
+      expect(resOk.status).toBe(200);
+    } finally {
+      await authServer.close().catch(() => {});
+      await authServerHandle.close();
+      if (originalKey === undefined) {
+        delete process.env.MCP_API_KEY;
+      } else {
+        process.env.MCP_API_KEY = originalKey;
+      }
+    }
+  });
 });

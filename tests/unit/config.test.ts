@@ -1,3 +1,4 @@
+import { mkdirSync, rmSync, symlinkSync } from "node:fs";
 import { resolve, sep } from "node:path";
 import { describe, expect, it } from "vitest";
 import {
@@ -12,7 +13,7 @@ import {
   toTableName,
 } from "../../src/core/config.js";
 import { ValidationError } from "../../src/core/errors.js";
-import { FIXED_DATE } from "../helpers.js";
+import { FIXED_DATE, makeTempAppRoot } from "../helpers.js";
 
 describe("naming (framework conventions)", () => {
   it("pascalToSnake", () => {
@@ -96,5 +97,24 @@ describe("resolveInAppRoot (path traversal)", () => {
     expect(() => resolveInAppRoot(appRoot, "../../../../Windows")).toThrow(
       ValidationError,
     );
+  });
+
+  it("blocks symlink traversal escaping APP_ROOT", () => {
+    const { root, cleanup } = makeTempAppRoot();
+    try {
+      const outsideDir = resolve(root, "..", `outside-dir-${Date.now()}`);
+      mkdirSync(outsideDir, { recursive: true });
+      const symlinkPath = resolve(root, "symlink-outside");
+      try {
+        symlinkSync(outsideDir, symlinkPath, "dir");
+        expect(() => resolveInAppRoot(root, "symlink-outside", "secret.txt")).toThrow(
+          ValidationError,
+        );
+      } finally {
+        rmSync(outsideDir, { recursive: true, force: true });
+      }
+    } finally {
+      cleanup();
+    }
   });
 });

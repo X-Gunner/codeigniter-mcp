@@ -4,7 +4,7 @@
 
 import { z } from "zod";
 
-const FieldSchema = z.object({
+export const FieldSchema = z.object({
   name: z
     .string()
     .regex(/^[a-z][a-zA-Z]*$/, "camelCase required (e.g. title, unitPrice)"),

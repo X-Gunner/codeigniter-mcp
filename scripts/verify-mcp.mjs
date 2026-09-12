@@ -179,8 +179,8 @@ exit(0);
     /* 2. Tool surface */
     const tools = await client.request("tools/list", {});
     report(
-      tools.result?.tools?.length === 7,
-      `Exposes 7 tools (found ${tools.result?.tools?.length ?? 0})`,
+      tools.result?.tools?.length === 8,
+      `Exposes 8 tools (found ${tools.result?.tools?.length ?? 0})`,
       tools.result?.tools?.map((t) => t.name).join(", "),
     );
 

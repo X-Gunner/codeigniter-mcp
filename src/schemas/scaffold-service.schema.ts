@@ -3,6 +3,7 @@
  */
 
 import { z } from "zod";
+import { FieldSchema } from "./scaffold-full-resource.schema.js";
 
 export const ScaffoldServiceInput = z.object({
   resourceName: z
@@ -10,6 +11,7 @@ export const ScaffoldServiceInput = z.object({
     .regex(/^[A-Z][a-zA-Z]*$/, "Must be PascalCase, e.g. Product")
     .min(2)
     .max(40),
+  fields: z.array(FieldSchema).optional().default([]),
   withRepository: z.boolean().default(true),
   overwrite: z.boolean().default(false),
 });

@@ -163,4 +163,39 @@ describe("validate_route (tool end-to-end)", () => {
       cleanup();
     }
   });
+
+  it("CI4 compatibility: detects routes registered without leading slash and with (:num)", async () => {
+    const { root, deps, cleanup } = createTestContext();
+    try {
+      const ci4Routes = `<?php
+$routes->get('items', 'Items::index');
+$routes->get('items/(:num)', 'Items::show/$1');
+$routes->resource('photos');
+`;
+      writeInAppRoot(root, "app/Config/Routes.php", ci4Routes);
+      const { validateRoute } = await import("../../src/tools/validate-route.js");
+
+      // Exact match against 'items' (without leading slash in file)
+      const exact = await validateRoute({ method: "GET", path: "/items" }, deps);
+      expect(exact.success).toBe(true);
+      if (!exact.success) return;
+      expect(exact.valid).toBe(false);
+      expect(exact.conflicts[0]!.reason).toContain("Exact duplicate route");
+
+      // Pattern match against 'items/(:num)' vs '/items/{id}'
+      const pattern = await validateRoute({ method: "GET", path: "/items/{id}" }, deps);
+      expect(pattern.success).toBe(true);
+      if (!pattern.success) return;
+      expect(pattern.valid).toBe(false);
+      expect(pattern.conflicts[0]!.reason).toContain("Pattern collision");
+
+      // Collision with expanded resource routes: $routes->resource('photos')
+      const resourceCollision = await validateRoute({ method: "DELETE", path: "/photos/{id}" }, deps);
+      expect(resourceCollision.success).toBe(true);
+      if (!resourceCollision.success) return;
+      expect(resourceCollision.valid).toBe(false);
+    } finally {
+      cleanup();
+    }
+  });
 });

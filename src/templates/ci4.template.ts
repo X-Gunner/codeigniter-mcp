@@ -60,7 +60,7 @@ function ci4Rule(field: ResourceContext["fields"][number]): string {
   return rules.join("|");
 }
 
-export function renderCi4Controller(ctx: ResourceContext): string {
+export function renderCi4Controller(ctx: ResourceContext, withService: boolean = false): string {
   const { className, kebabName } = ctx;
   const rules = ctx.fields
     .map((field) => `            '${field.name}' => '${ci4Rule(field)}',`)
@@ -68,6 +68,89 @@ export function renderCi4Controller(ctx: ResourceContext): string {
   const columns = ctx.fields
     .map((field) => `<th>${field.name}</th>`)
     .join("\n              ");
+
+  if (withService) {
+    return `<?php
+
+namespace App\\Controllers;
+
+use App\\Controllers\\BaseController;
+use App\\Services\\${className}Service;
+
+class ${className} extends BaseController
+{
+    protected $service;
+
+    public function __construct()
+    {
+        $this->service = new ${className}Service();
+    }
+
+    public function index()
+    {
+        $data['items'] = $this->service->all();
+
+        return view('${kebabName}/index', $data);
+    }
+
+    public function create()
+    {
+        return view('${kebabName}/create');
+    }
+
+    public function store()
+    {
+        $rules = [
+${rules}
+        ];
+
+        if (! $this->validate($rules)) {
+            return redirect()->back()->withInput()
+                ->with('errors', $this->validator->getErrors());
+        }
+
+        $this->service->create($this->request->getPost());
+
+        return redirect()->to('/${kebabName}')->with('success', 'Created.');
+    }
+
+    public function edit($id = null)
+    {
+        $data['item'] = $this->service->find($id);
+
+        if ($data['item'] === null) {
+            throw \\CodeIgniter\\Exceptions\\PageNotFoundException::forPageNotFound();
+        }
+
+        return view('${kebabName}/edit', $data);
+    }
+
+    public function update($id = null)
+    {
+        $rules = [
+${rules}
+        ];
+
+        if (! $this->validate($rules)) {
+            return redirect()->back()->withInput()
+                ->with('errors', $this->validator->getErrors());
+        }
+
+        $this->service->update($id, $this->request->getPost());
+
+        return redirect()->to('/${kebabName}')->with('success', 'Updated.');
+    }
+
+    public function delete($id = null)
+    {
+        $this->service->delete($id);
+
+        return redirect()->to('/${kebabName}');
+    }
+}
+`;
+  }
+
   return `<?php
 
 namespace App\\Controllers;
@@ -301,8 +384,10 @@ export function renderCi4View(ctx: ResourceContext): string {
           ${cells}
             <td>
                 <a href="<?= url_to('${kebabName}::edit', $item['id']) ?>">Edit</a>
-                <a href="<?= url_to('${kebabName}::delete', $item['id']) ?>"
-                   onclick="return confirm('Delete this record?')">Delete</a>
+                <form action="<?= url_to('${kebabName}::delete', $item['id']) ?>" method="post" style="display:inline" onsubmit="return confirm('Delete this record?')">
+                    <?= csrf_field() ?>
+                    <button type="submit" style="background:none;border:none;color:#c00;cursor:pointer;padding:0;text-decoration:underline">Delete</button>
+                </form>
             </td>
         </tr>
     <?php endforeach; ?>

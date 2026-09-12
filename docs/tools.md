@@ -51,7 +51,8 @@ contract-first) and it warns; with `withTests=true` and no repository it skips
 the unit test and warns. Rate limited.
 
 In the `ci4` profile the tool generates Controller + Model + Migration + View
-(± Model test) instead; `withRepository` is ignored with a warning.
+(± Model test) instead; `withRepository=true` (default) also generates the Service
+and wires the Controller to it; `withRepository=false` generates a controller using the Model directly.
 
 ## 2. `scaffold_controller`
 
@@ -127,6 +128,42 @@ Validates a PHP file against the conventions. `compliant=false` if at least one
 Rules adapt to the profile: in `ci4` `missing-strict-types` and the
 `Controller` suffix are **not** required, method names are snake_case, and SQL
 in a controller is a `warning` instead of an `error`.
+
+## 8. `scaffold_ci4_mcp_server`
+
+Scaffolds a native, in-app Model Context Protocol (MCP) server Spark command inside a CodeIgniter 4 application (`app/Commands/McpServer.php`).
+
+This enables **dual-architecture live runtime introspection**:
+- **Outer MCP (Node/TypeScript)**: Rapid code scaffolding, convention enforcement, route collision validation, safe migrations.
+- **Inner MCP (PHP Spark Command)**: Live runtime database schema reflection, safe read-only query execution, dynamic route discovery, and migration status.
+
+**Input**
+
+| Field | Type | Rules |
+|---|---|---|
+| `commandName` | string | Spark command format (`group:name`), default `"mcp:serve"` |
+| `className` | string | `PascalCase`, default `"McpServer"` |
+| `readOnly` | bool | Enforces safe read-only database inspection (default `true`) |
+| `withDatabaseTools` | bool | Exposes `ci4_db_tables` and `ci4_db_query` (default `true`) |
+| `withRouteTools` | bool | Exposes `ci4_routes_list` (default `true`) |
+| `withMigrationTools` | bool | Exposes `ci4_migration_status` (default `true`) |
+| `overwrite` | bool | Overwrite existing command file (default `false`) |
+
+**Output**
+
+- `filePath`: Path of the generated Spark command (`app/Commands/McpServer.php`)
+- `written`: Whether the file was written to disk
+- `sparkCommand`: The command line to execute (`php spark mcp:serve`)
+- `supportedTools`: Array of in-app tools available (`ci4_db_tables`, `ci4_db_query`, `ci4_routes_list`, `ci4_migration_status`)
+- `readOnly`: Whether readOnly mode is active
+- `mcpConfigSnippet`: Ready-to-copy JSON configuration block for Claude Code / Cursor / Windsurf / Trae
+- `warnings`: Actionable warnings
+
+**Tools exposed by the generated in-app server:**
+- `ci4_db_tables`: Lists all tables and schema structure (column types, nullability, primary keys).
+- `ci4_db_query`: Executes safe read-only `SELECT` queries (capped at 50 rows, blocks mutations).
+- `ci4_routes_list`: Reflects dynamically registered routes and handlers from CodeIgniter's RouteCollection.
+- `ci4_migration_status`: Returns current migration batch and version status from the active database.
 
 ## End-to-end example
 

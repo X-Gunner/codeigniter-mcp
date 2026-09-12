@@ -10,7 +10,7 @@ export const ValidateRouteInput = z.object({
   method: RouteMethod,
   path: z
     .string()
-    .regex(/^\/[a-z0-9\-\/{}]*$/, "kebab-case, may use {param}"),
+    .regex(/^\/?[a-z0-9\-\/{}(:)]*$/, "kebab-case, may use {param} or CI4 (:placeholder)"),
 });
 
 export const ValidateRouteOutput = z.object({

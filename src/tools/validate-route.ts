@@ -36,10 +36,17 @@ export interface ValidateRoutePayload {
 
 const ROUTE_PATTERN_SOURCE = "->(get|post|put|patch|delete)\\s*\\(\\s*['\"]([^'\"]+)['\"]";
 
+/** Helper: guarantees a leading slash for uniform comparison. */
+export function ensureLeadingSlash(path: string): string {
+  return path.startsWith("/") ? path : `/${path}`;
+}
+
 /**
  * Extracts the registered routes from the Routes.php content.
- * Supported format: `$routes->get('/products/{id}', 'ProductController::show');`
- * Deduplicates by `method + path` (a route registered twice is one entry).
+ * Supported formats:
+ * - Direct: `$routes->get('/products/{id}', 'ProductController::show');` or `$routes->get('products', ...);`
+ * - CI4 Resource: `$routes->resource('photos');` (expands to standard REST routes)
+ * Deduplicates by `method + path`.
  */
 export function parseRoutes(content: string): RouteEntry[] {
   const regex = new RegExp(ROUTE_PATTERN_SOURCE, "gi");
@@ -48,7 +55,7 @@ export function parseRoutes(content: string): RouteEntry[] {
   let match: RegExpExecArray | null;
   while ((match = regex.exec(content)) !== null) {
     const method = match[1]!.toUpperCase();
-    const path = match[2]!;
+    const path = ensureLeadingSlash(match[2]!);
     const key = `${method} ${path}`;
     if (seen.has(key)) {
       continue;
@@ -56,12 +63,39 @@ export function parseRoutes(content: string): RouteEntry[] {
     seen.add(key);
     routes.push({ method, path });
   }
+
+  // Parse CI4 resource routes: $routes->resource('photos')
+  const resourceRegex = /->resource\s*\(\s*['"]([^'"]+)['"]/gi;
+  while ((match = resourceRegex.exec(content)) !== null) {
+    const resource = match[1]!.replace(/^\/+|\/+$/g, "");
+    const base = `/${resource}`;
+    const resourceRoutes: RouteEntry[] = [
+      { method: "GET", path: base },
+      { method: "POST", path: base },
+      { method: "GET", path: `${base}/new` },
+      { method: "GET", path: `${base}/{id}` },
+      { method: "GET", path: `${base}/{id}/edit` },
+      { method: "PUT", path: `${base}/{id}` },
+      { method: "PATCH", path: `${base}/{id}` },
+      { method: "DELETE", path: `${base}/{id}` },
+    ];
+    for (const r of resourceRoutes) {
+      const key = `${r.method} ${r.path}`;
+      if (!seen.has(key)) {
+        seen.add(key);
+        routes.push(r);
+      }
+    }
+  }
+
   return routes;
 }
 
-/** `{param}` → `*` to compare the structural shape of a route. */
+/** `{param}` or CI4 `(:num)`, `(:segment)`, `(:any)` → `*` to compare the structural shape of a route. */
 export function normalizeRoutePattern(path: string): string {
-  return path.replace(/\{[^}]+\}/g, "*");
+  return ensureLeadingSlash(path)
+    .replace(/\{[^}]+\}/g, "*")
+    .replace(/\(:(num|segment|any|alphanumeric|hash|all)\)/gi, "*");
 }
 
 /** Validates the path shape: balanced braces and valid parameter names. */
@@ -92,23 +126,25 @@ export function findConflicts(
   existing: RouteEntry[],
 ): RouteConflict[] {
   const conflicts: RouteConflict[] = [];
-  const newPattern = normalizeRoutePattern(path);
+  const normalizedPath = ensureLeadingSlash(path);
+  const newPattern = normalizeRoutePattern(normalizedPath);
 
   for (const route of existing) {
     if (route.method !== method) {
       continue;
     }
-    if (route.path === path) {
+    const existingNormalized = ensureLeadingSlash(route.path);
+    if (existingNormalized === normalizedPath) {
       conflicts.push({
         existingMethod: route.method,
         existingPath: route.path,
         reason: "Exact duplicate route (same method and path).",
       });
-    } else if (normalizeRoutePattern(route.path) === newPattern) {
+    } else if (normalizeRoutePattern(existingNormalized) === newPattern) {
       conflicts.push({
         existingMethod: route.method,
         existingPath: route.path,
-        reason: "Pattern collision: the route shares its structure with a different {param}.",
+        reason: "Pattern collision: the route shares its structure with a different parameter placeholder.",
       });
     }
   }

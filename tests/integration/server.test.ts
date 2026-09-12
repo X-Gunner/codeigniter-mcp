@@ -72,7 +72,7 @@ describe("MCP server (protocol)", () => {
     running = undefined;
   });
 
-  it("exposes the 7 tools defined in the spec", async () => {
+  it("exposes the 8 tools defined in the spec", async () => {
     running = await startTestServer();
     const { tools } = await running.client.listTools();
     const names = tools.map((t) => t.name).sort();

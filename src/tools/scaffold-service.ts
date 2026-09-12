@@ -36,7 +36,7 @@ export async function scaffoldService(
 ): Promise<ToolResult<ScaffoldServicePayload>> {
   return handleToolCall(async () => {
     const parsed = ScaffoldServiceInput.parse(input);
-    const ctx = buildResourceContext(parsed.resourceName, []);
+    const ctx = buildResourceContext(parsed.resourceName, parsed.fields ?? []);
     const warnings: string[] = [];
     const additionalFilesCreated: string[] = [];
 

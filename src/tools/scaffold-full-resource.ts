@@ -220,7 +220,7 @@ export async function scaffoldFullResource(
       files.push(
         {
           rel: `app/Controllers/${ctx.className}.php`,
-          content: renderCi4Controller(ctx),
+          content: renderCi4Controller(ctx, parsed.withRepository),
         },
         {
           rel: `app/Models/${ctx.className}Model.php`,
