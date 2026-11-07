@@ -1,9 +1,13 @@
 # codeigniter-mcp
 
+<p align="center">
+  <img src="docs/images/hero-banner.jpg" alt="codeigniter-mcp Hero Banner" width="100%" />
+</p>
+
 [![npm version](https://img.shields.io/npm/v/codeigniter-mcp.svg?style=flat-square)](https://www.npmjs.com/package/codeigniter-mcp)
 [![npm downloads](https://img.shields.io/npm/dm/codeigniter-mcp.svg?style=flat-square)](https://www.npmjs.com/package/codeigniter-mcp)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](LICENSE)
-[![Agensi Marketplace Skill](https://img.shields.io/badge/Agensi-CodeIgniter%20Master-FF4B2B?style=flat-square&logo=sparkles)](https://agensi.io)
+[![Agensi Marketplace Skill](https://img.shields.io/badge/Agensi-CodeIgniter%204%20Master-FF4B2B?style=flat-square&logo=sparkles)](https://agensi.io)
 [![CI Build](https://img.shields.io/github/actions/workflow/status/AntigamerISK/codeigniter-mcp/ci.yml?branch=main&style=flat-square)](https://github.com/AntigamerISK/codeigniter-mcp/actions)
 [![Tests](https://img.shields.io/badge/tests-165%2F165%20passed-brightgreen.svg?style=flat-square)](docs/testing.md)
 [![Node](https://img.shields.io/badge/node-%3E%3D20.12-brightgreen.svg?style=flat-square)](package.json)
@@ -283,6 +287,24 @@ Result: 13 passed · 0 failed · 0 skipped
 - [docs/profiles.md](docs/profiles.md) — Profiles, auto-detection (`ci4` vs `spec`), and configuration.
 - [docs/security.md](docs/security.md) — Deep dive into the security architecture and guardrails.
 - [docs/testing.md](docs/testing.md) — Testing strategy, E2E fixtures, and CI automation.
+
+---
+
+## 💼 Enterprise Support, Migration & Consulting Services
+
+Need dedicated support, custom tool development, or legacy modernization for your engineering team?
+
+We offer professional architecture and migration services tailored for enterprise CodeIgniter ecosystems:
+
+- **Legacy Migration (CI3 → CI4)**: Safe, phased migration of legacy monolithic CodeIgniter 3 systems to modern CodeIgniter 4 + PHP 8.2+ with clean MVC, Service layer, and typed entities.
+- **Custom MCP & AI Tooling**: Custom-tailored Model Context Protocol servers and specialized IDE prompts tailored to your proprietary schema, internal libraries, and coding standards.
+- **Architecture & Security Audits**: Comprehensive review of existing repositories to eliminate controller SQL leakage, harden PDO parameters, implement CSRF/Auth safeguards, and modernize routing.
+- **Monthly Retainer / Dedicated Support**: Direct SLA-backed architecture advisory, prompt engineering support, and framework maintenance for engineering teams.
+
+👉 **Inquire or Request a Consultation:**
+- **Email**: [roblesantigravity@gmail.com](mailto:roblesantigravity@gmail.com)
+- **GitHub Discussions**: [Start a Discussion](https://github.com/AntigamerISK/codeigniter-mcp/discussions)
+- **Marketplace Skill**: Available on [Agensi.io](https://agensi.io) (`CodeIgniter 4 Master`)
 
 ---
 
