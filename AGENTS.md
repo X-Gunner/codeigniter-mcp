@@ -46,7 +46,7 @@ Verifica que el archivo de configuración MCP (`.cursor/mcp.json`, `.trae/mcp.js
 >   "mcpServers": {
 >     "codeigniter-mcp": {
 >       "command": "node",
->       "args": ["/home/rinx/Escritorio/trae_projects/MCP_CODEIGNITER/dist/index.js"],
+>       "args": ["/path/to/codeigniter-mcp/dist/index.js"],
 >       "env": {
 >         "APP_ROOT": "${workspaceFolder}"
 >       }

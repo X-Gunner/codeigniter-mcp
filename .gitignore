@@ -5,6 +5,7 @@ node_modules/
 dist/
 *.tsbuildinfo
 *.zip
+skill_package/
 
 # Logs
 *.log

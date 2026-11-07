@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-11-07
+
+### Added
+
+- **Dual-Engine Architecture (Engine 2)**: Added `scaffold_ci4_mcp_server` tool
+  that scaffolds native `php spark mcp:serve` in-app Spark command for live
+  runtime database schema reflection (`ci4_db_tables`), safe read-only SQL
+  execution (`ci4_db_query`), compiled routes inspection (`ci4_routes_list`), and
+  active migration history (`ci4_migration_status`).
+- **Streamable HTTP Transport**: Added `MCP_TRANSPORT=http` support with API Key
+  authentication (`Authorization: Bearer` / `X-API-Key`) and DNS rebinding attack
+  protection for cloud agents (OpenAI Codex, Google Project Astra).
+- **CodeIgniter 4.7.6 Compatibility**: Full conformance with CI 4.7.6 security
+  patches, including strict mass-assignment enforcement (`$protectFields = true`,
+  explicit `$allowedFields` in all generated models) and PDO query parameterization.
+- **Enterprise Security Hardening**: Canonical `realpathSync` symlink traversal
+  prevention in `fs-safe.ts`, safe PDO mutations verification, and session rate
+  limiting.
+- **Documentation & Brand Assets**: High-resolution widescreen hero banner,
+  official brand identity icons in `docs/images/`, and direct in-app Agensi
+  marketplace chat routing.
+
 ## [0.5.0] - 2026-08-13
 
 ### Added
