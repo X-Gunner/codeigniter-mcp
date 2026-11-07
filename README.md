@@ -22,7 +22,7 @@
   <a href="#-enterprise-support-migration--consulting-services"><b>💼 Enterprise Support & Consulting</b></a>
 </p>
 
-> 💼 **Enterprise Modernization & Custom AI Tooling:** Migrating monolithic CodeIgniter 3 systems to CI4? Need custom MCP servers, architecture audits, or dedicated team support? [**Request Consultation &rarr;**](#-enterprise-support-migration--consulting-services)
+> 💼 **Enterprise Modernization & Custom AI Tooling:** Migrating monolithic CodeIgniter 3 systems to CI4? Need custom MCP servers, architecture audits, or dedicated team support? [**Message Cristofher on Agensi &rarr;**](https://www.agensi.io/creators/cristofher-robles)
 
 **Model Context Protocol (MCP)** server built for high-velocity AI development on **CodeIgniter 4** and modern PHP architectures (**MVC + Services/Repository** layer).
 
@@ -313,8 +313,7 @@ We offer professional architecture and migration services tailored for enterpris
 - **Monthly Retainer / Dedicated Support**: Direct SLA-backed architecture advisory, prompt engineering support, and framework maintenance for engineering teams.
 
 👉 **Inquire or Request a Consultation:**
-- **Email**: [roblesantigravity@gmail.com](mailto:roblesantigravity@gmail.com)
-- **GitHub Discussions**: [Start a Discussion](https://github.com/X-Gunner/codeigniter-mcp/discussions)
+- **Direct Chat & Messages**: [Message Cristofher Robles on Agensi](https://www.agensi.io/creators/cristofher-robles)
 - **Marketplace Skill**: Available on [Agensi.io](https://agensi.io) (`CodeIgniter 4 Master`)
 
 ---
