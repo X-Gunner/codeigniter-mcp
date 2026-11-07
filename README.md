@@ -3,6 +3,7 @@
 [![npm version](https://img.shields.io/npm/v/codeigniter-mcp.svg?style=flat-square)](https://www.npmjs.com/package/codeigniter-mcp)
 [![npm downloads](https://img.shields.io/npm/dm/codeigniter-mcp.svg?style=flat-square)](https://www.npmjs.com/package/codeigniter-mcp)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](LICENSE)
+[![Agensi Marketplace Skill](https://img.shields.io/badge/Agensi-CodeIgniter%20Master-FF4B2B?style=flat-square&logo=sparkles)](https://agensi.io)
 [![CI Build](https://img.shields.io/github/actions/workflow/status/AntigamerISK/codeigniter-mcp/ci.yml?branch=main&style=flat-square)](https://github.com/AntigamerISK/codeigniter-mcp/actions)
 [![Tests](https://img.shields.io/badge/tests-165%2F165%20passed-brightgreen.svg?style=flat-square)](docs/testing.md)
 [![Node](https://img.shields.io/badge/node-%3E%3D20.12-brightgreen.svg?style=flat-square)](package.json)
@@ -281,4 +282,4 @@ Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) before
 
 ## License
 
-Distributed under the **MIT License**. See [LICENSE](LICENSE) for more information.
+Distributed under the **MIT License**. Copyright (c) 2026 Cristofher Robles. See [LICENSE](LICENSE) for more information.
