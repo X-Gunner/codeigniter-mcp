@@ -73,6 +73,16 @@ flowchart TB
 
 ---
 
+## AI Agent Skill (Agensi.io Marketplace)
+
+Prefer installing as a ready-to-use AI Agent Skill?  
+Get the **CodeIgniter 4 Master** skill directly from [Agensi.io](https://agensi.io):
+- **Plug-and-play workflow instructions** (`SKILL.md`) for Claude Code, Cursor, Trae, Copilot, and Windsurf.
+- **Architectural Guardrails**: Guarantees zero SQL in controllers, CSRF-protected forms, and type safety.
+- **Automated MCP Triggers**: Configures your agent to automatically invoke `codeigniter-mcp` tools when creating modules or inspecting databases.
+
+---
+
 ## Quickstart
 
 ### Run with `npx` (No installation needed)
