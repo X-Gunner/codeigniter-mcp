@@ -42,16 +42,16 @@
   "license": "MIT",
   "author": {
     "name": "Cristofher Robles",
-    "url": "https://github.com/AntigamerISK"
+    "url": "https://github.com/X-Gunner"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AntigamerISK/codeigniter-mcp.git"
+    "url": "git+https://github.com/X-Gunner/codeigniter-mcp.git"
   },
   "bugs": {
-    "url": "https://github.com/AntigamerISK/codeigniter-mcp/issues"
+    "url": "https://github.com/X-Gunner/codeigniter-mcp/issues"
   },
-  "homepage": "https://github.com/AntigamerISK/codeigniter-mcp#readme",
+  "homepage": "https://github.com/X-Gunner/codeigniter-mcp#readme",
   "sideEffects": false,
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",

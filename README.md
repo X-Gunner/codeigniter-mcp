@@ -1,17 +1,28 @@
 # codeigniter-mcp
 
 <p align="center">
-  <img src="docs/images/hero-banner.jpg" alt="codeigniter-mcp Hero Banner" width="100%" />
+  <img src="docs/images/hero-banner.jpg" alt="codeigniter-mcp Hero Banner" width="680" style="max-width: 100%; border-radius: 8px;" />
 </p>
 
-[![npm version](https://img.shields.io/npm/v/codeigniter-mcp.svg?style=flat-square)](https://www.npmjs.com/package/codeigniter-mcp)
-[![npm downloads](https://img.shields.io/npm/dm/codeigniter-mcp.svg?style=flat-square)](https://www.npmjs.com/package/codeigniter-mcp)
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](LICENSE)
-[![Agensi Marketplace Skill](https://img.shields.io/badge/Agensi-CodeIgniter%204%20Master-FF4B2B?style=flat-square&logo=sparkles)](https://agensi.io)
-[![CI Build](https://img.shields.io/github/actions/workflow/status/AntigamerISK/codeigniter-mcp/ci.yml?branch=main&style=flat-square)](https://github.com/AntigamerISK/codeigniter-mcp/actions)
-[![Tests](https://img.shields.io/badge/tests-165%2F165%20passed-brightgreen.svg?style=flat-square)](docs/testing.md)
-[![Node](https://img.shields.io/badge/node-%3E%3D20.12-brightgreen.svg?style=flat-square)](package.json)
-[![SemVer 2.0.0](https://img.shields.io/badge/semver-2.0.0-blue.svg?style=flat-square)](https://semver.org/)
+<p align="center">
+  <a href="https://www.npmjs.com/package/codeigniter-mcp"><img src="https://img.shields.io/npm/v/codeigniter-mcp.svg?style=flat-square" alt="npm version" /></a>
+  <a href="https://www.npmjs.com/package/codeigniter-mcp"><img src="https://img.shields.io/npm/dm/codeigniter-mcp.svg?style=flat-square" alt="npm downloads" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square" alt="License: MIT" /></a>
+  <a href="https://agensi.io"><img src="https://img.shields.io/badge/Agensi-CodeIgniter%204%20Master-FF4B2B?style=flat-square&logo=sparkles" alt="Agensi Marketplace Skill" /></a>
+  <a href="https://github.com/X-Gunner/codeigniter-mcp/actions"><img src="https://img.shields.io/github/actions/workflow/status/X-Gunner/codeigniter-mcp/ci.yml?branch=main&style=flat-square" alt="CI Build" /></a>
+  <a href="docs/testing.md"><img src="https://img.shields.io/badge/tests-165%2F165%20passed-brightgreen.svg?style=flat-square" alt="Tests" /></a>
+  <a href="#-enterprise-support-migration--consulting-services"><img src="https://img.shields.io/badge/Enterprise-Consulting%20Available-orange.svg?style=flat-square" alt="Consulting Available" /></a>
+</p>
+
+<p align="center">
+  <a href="#quickstart"><b>Quickstart</b></a> •
+  <a href="#architecture-the-top-1-dual-engine-design"><b>Architecture</b></a> •
+  <a href="#available-tools-8-tools"><b>Tools Reference</b></a> •
+  <a href="#ai-agent-skill-agensiio-marketplace"><b>Agensi Skill</b></a> •
+  <a href="#-enterprise-support-migration--consulting-services"><b>💼 Enterprise Support & Consulting</b></a>
+</p>
+
+> 💼 **Enterprise Modernization & Custom AI Tooling:** Migrating monolithic CodeIgniter 3 systems to CI4? Need custom MCP servers, architecture audits, or dedicated team support? [**Request Consultation &rarr;**](#-enterprise-support-migration--consulting-services)
 
 **Model Context Protocol (MCP)** server built for high-velocity AI development on **CodeIgniter 4** and modern PHP architectures (**MVC + Services/Repository** layer).
 
@@ -104,7 +115,7 @@ npm install -g codeigniter-mcp
 ### From source (Contributors)
 
 ```bash
-git clone https://github.com/AntigamerISK/codeigniter-mcp.git
+git clone https://github.com/X-Gunner/codeigniter-mcp.git
 cd codeigniter-mcp
 npm install
 npm run build
@@ -303,7 +314,7 @@ We offer professional architecture and migration services tailored for enterpris
 
 👉 **Inquire or Request a Consultation:**
 - **Email**: [roblesantigravity@gmail.com](mailto:roblesantigravity@gmail.com)
-- **GitHub Discussions**: [Start a Discussion](https://github.com/AntigamerISK/codeigniter-mcp/discussions)
+- **GitHub Discussions**: [Start a Discussion](https://github.com/X-Gunner/codeigniter-mcp/discussions)
 - **Marketplace Skill**: Available on [Agensi.io](https://agensi.io) (`CodeIgniter 4 Master`)
 
 ---
