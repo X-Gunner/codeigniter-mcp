@@ -120,3 +120,4 @@ Verify all generated or touched files:
 2. **Never Destructive via GET:** Delete actions in views must always be POST forms containing `<input type="hidden" name="_method" value="DELETE">` and `<?= csrf_field() ?>`.
 3. **No Blind Overwrite:** If a tool returns `written: false` because a file exists, request user consent before running with `overwrite: true`.
 4. **Preserve Type Safety:** Always generate `declare(strict_types=1);` and proper PHP 8.1+ parameter types.
+
